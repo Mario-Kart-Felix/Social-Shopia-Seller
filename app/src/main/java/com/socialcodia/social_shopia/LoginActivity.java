@@ -207,14 +207,25 @@ public class LoginActivity extends AppCompatActivity {
             mRef.child(Constants.USERS).child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String name = dataSnapshot.child(Constants.USER_NAME).getValue(String.class);
-                    if (name.isEmpty())
+                    String userType = dataSnapshot.child(Constants.USER_TYPE).getValue(String.class);
+                    if (userType.equals("seller"))
                     {
-                        sendToCreateShop();
+                        String name = dataSnapshot.child(Constants.USER_NAME).getValue(String.class);
+                        String shopName = dataSnapshot.child(Constants.SHOP_NAME).getValue(String.class);
+                        if (name.isEmpty() || shopName.isEmpty())
+                        {
+                            sendToCreateShop();
+                        }
+                        else
+                        {
+                            sendToHome();
+                        }
                     }
                     else
                     {
-                        sendToHome();
+                        btnLogin.setEnabled(true);
+                        Toast.makeText(LoginActivity.this, "You are not a seller.", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
                     }
                 }
 
