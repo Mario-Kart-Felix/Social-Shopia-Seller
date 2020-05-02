@@ -3,8 +3,8 @@ package com.socialcodia.social_shopia.storage;
 public class Constants {
         public static String
                 USER_MOBILE = "mobile",
-                USER_ID = "uid",
-                USER_IMAGE = "image",
+                SHOP_ID = "shopId",
+                SHOP_IMAGE = "image",
                 USER_EMAIL = "email",
                 USER_NAME = "name",
                 CITY = "city",
@@ -16,7 +16,8 @@ public class Constants {
                 USERS = "users",
                 ADDRESS = "address",
                 SHOP_NAME = "shopName",
-                DELIVERY_FEES = "deliveryFees"
+                DELIVERY_FEES = "deliveryFees",
+                USER_TYPE = "userType"
 
 
 
