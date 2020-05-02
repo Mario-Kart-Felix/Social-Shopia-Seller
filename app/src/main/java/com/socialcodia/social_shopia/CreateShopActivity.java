@@ -432,6 +432,7 @@ public class CreateShopActivity extends AppCompatActivity implements LocationLis
             public void onSuccess(Void aVoid) {
                 btnCreateShop.setEnabled(true);
                 Toast.makeText(getApplicationContext(), "Shop Created", Toast.LENGTH_SHORT).show();
+                sendToHome();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -441,6 +442,13 @@ public class CreateShopActivity extends AppCompatActivity implements LocationLis
             }
         });
 
+    }
+
+    private void sendToHome()
+    {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

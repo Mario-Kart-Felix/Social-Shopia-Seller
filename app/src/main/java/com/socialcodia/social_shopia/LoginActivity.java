@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser()!=null)
         {
-            checkLoginState();
+            sendToHome();
         }
 
     }
