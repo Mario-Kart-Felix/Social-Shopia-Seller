@@ -204,7 +204,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         if (mAuth.getCurrentUser()!=null)
         {
-            mRef.child(Constants.USERS).child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            mRef.child(Constants.SHOPS).child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String userType = dataSnapshot.child(Constants.USER_TYPE).getValue(String.class);
