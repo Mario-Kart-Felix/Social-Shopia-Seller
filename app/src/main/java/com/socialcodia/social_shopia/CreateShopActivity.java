@@ -10,6 +10,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -35,8 +40,10 @@ import com.google.firebase.storage.UploadTask;
 import com.socialcodia.social_shopia.storage.Constants;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
-public class CreateShopActivity extends AppCompatActivity {
+public class CreateShopActivity extends AppCompatActivity implements LocationListener {
 
 
     Toolbar toolbar;
@@ -55,9 +62,16 @@ public class CreateShopActivity extends AppCompatActivity {
     FirebaseUser mUser;
 
     Uri filePath;
+    LocationManager locationManager;
+
     private final  static int STORAGE_PERMISSION_CODE = 100;
+    private final  static int LOCATION_PERMISSION_CODE =200;
 
     String storagePermission[];
+    String locationPermission[];
+
+    double latitude;
+    double longitude;
 
     String userId,name,mobile,state,city,country,address,shopName,deliveryFees;
 
@@ -93,6 +107,21 @@ public class CreateShopActivity extends AppCompatActivity {
         }
 
         storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        locationPermission = new String[] {Manifest.permission.ACCESS_FINE_LOCATION};
+
+        btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkLocationPermission())
+                {
+                    detectLocation();
+                }
+                else
+                {
+                    requestLocationPermission();
+                }
+            }
+        });
 
         btnCreateShop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +155,8 @@ public class CreateShopActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode==100 && resultCode==RESULT_OK && data!=null)
@@ -151,9 +181,111 @@ public class CreateShopActivity extends AppCompatActivity {
         return result;
     }
 
+    private boolean checkLocationPermission()
+    {
+        boolean result = ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
+                == (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+
+    private void requestLocationPermission()
+    {
+        ActivityCompat.requestPermissions(this,locationPermission,LOCATION_PERMISSION_CODE);
+    }
+
     private void requestStoragePermission()
     {
         ActivityCompat.requestPermissions(this,storagePermission,STORAGE_PERMISSION_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case STORAGE_PERMISSION_CODE:
+                if (grantResults.length>0)
+                {
+                    boolean result = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (result)
+                    {
+                        chooseImage();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Please Allow Storage Permission", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case LOCATION_PERMISSION_CODE:
+                if (grantResults.length>0)
+                {
+                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (locationAccepted)
+                    {
+                        detectLocation();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Location Permission is required", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        }
+    }
+
+    private void detectLocation()
+    {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0,this);
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        findAddress();
+    }
+
+    private void findAddress()
+    {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this,Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(latitude,longitude,1);
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String address = addresses.get(0).getAddressLine(0);
+
+            //set data
+            inputCity.setText(city);
+            inputState.setText(state);
+            inputCountry.setText(country);
+            inputAddress.setText(address);
+
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     private void validateData()
@@ -310,7 +442,6 @@ public class CreateShopActivity extends AppCompatActivity {
         });
 
     }
-
 
 
 }
