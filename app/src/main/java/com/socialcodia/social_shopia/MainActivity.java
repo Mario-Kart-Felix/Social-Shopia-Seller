@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     String userId;
 
-    private ImageButton btnEditShop;
+    private ImageButton btnEditShop,btnAddProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //Ui init
 
         btnEditShop = findViewById(R.id.btnEditShop);
+        btnAddProduct = findViewById(R.id.btnAddProduct);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
@@ -63,9 +64,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToAddProduct();
+            }
+        });
+
         checkLoginState();
     }
 
+    private void sendToAddProduct()
+    {
+        Intent intent = new Intent(getApplicationContext(),AddProductActivity.class);
+        startActivity(intent);
+    }
 
 
     private void checkLoginState()
