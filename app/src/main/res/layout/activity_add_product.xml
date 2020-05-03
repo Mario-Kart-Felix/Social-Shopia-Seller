@@ -27,6 +27,15 @@
                     android:layout_height="wrap_content"
                     >
 
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_keyboard_arrow_left"
+                        android:background="@null"
+                        android:tint="#ffffff"
+                        android:id="@+id/btnBack"
+                        />
+
 
                     <TextView
                         android:id="@+id/textView"
@@ -161,7 +170,7 @@
                 android:drawableLeft="@drawable/ic_shopping_cart_black_24dp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/productDiscountSwitch"
+                android:id="@+id/switchProductDiscount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -184,9 +193,10 @@
                 android:hint="Discount Price"
                 android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp"
+                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:inputType="textPostalAddress"
-                app:layout_constraintTop_toBottomOf="@+id/productDiscountSwitch"
+                app:layout_constraintTop_toBottomOf="@+id/switchProductDiscount"
                 tools:layout_editor_absoluteX="16dp" />
 
             <EditText
@@ -196,6 +206,7 @@
                 android:background="@drawable/text_background"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
+                android:visibility="gone"
                 android:drawableLeft="@drawable/ic_shopping_cart_black_24dp"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/colorPrimaryDark"
@@ -208,7 +219,7 @@
                 tools:layout_editor_absoluteX="16dp" />
 
             <Button
-                android:id="@+id/btnCreateShop"
+                android:id="@+id/btnAddProduct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_corner"
