@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
     String userId;
 
+    private ImageButton btnEditShop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Ui init
+
+        btnEditShop = findViewById(R.id.btnEditShop);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
@@ -48,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
             userId = mUser.getUid();
         }
 
+        btnEditShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToEditShop();
+            }
+        });
 
         checkLoginState();
     }
@@ -90,5 +104,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),CreateShopActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void sendToEditShop()
+    {
+        Intent intent = new Intent(getApplicationContext(),EditShopActivity.class);
+        startActivity(intent);
     }
 }

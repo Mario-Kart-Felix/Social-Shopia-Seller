@@ -236,6 +236,8 @@ public class CreateShopActivity extends AppCompatActivity implements LocationLis
 
     private void detectLocation()
     {
+        Toast.makeText(this, "Please wait...", Toast.LENGTH_LONG).show();
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0,this);
     }
@@ -285,7 +287,7 @@ public class CreateShopActivity extends AppCompatActivity implements LocationLis
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        Toast.makeText(this, "Please Enable Your GPS.", Toast.LENGTH_SHORT).show();
     }
 
     private void validateData()
@@ -354,7 +356,7 @@ public class CreateShopActivity extends AppCompatActivity implements LocationLis
             inputAddress.setError("Enter Shop Address");
             inputAddress.requestFocus();
         }
-        else if (address.length()<3 || address.length()>40)
+        else if (address.length()<3 || address.length()>100)
         {
             inputAddress.setError("Enter A Valid Address");
             inputAddress.requestFocus();
