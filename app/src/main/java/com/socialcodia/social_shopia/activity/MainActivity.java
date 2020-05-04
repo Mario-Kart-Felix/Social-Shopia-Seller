@@ -2,9 +2,12 @@ package com.socialcodia.social_shopia.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -14,11 +17,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.socialcodia.social_shopia.R;
+import com.socialcodia.social_shopia.adapter.AdapterProduct;
+import com.socialcodia.social_shopia.model.ModelProduct;
 import com.socialcodia.social_shopia.storage.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseStorage mStorage;
     StorageReference mStorageRef;
     FirebaseUser mUser;
+
+    RecyclerView recyclerView;
+    List<ModelProduct> modelProductList;
 
     String userId;
 
@@ -43,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnEditShop = findViewById(R.id.btnEditShop);
         btnAddProduct = findViewById(R.id.btnAddProduct);
+        recyclerView = findViewById(R.id.mainRecyclerView);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
@@ -55,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         {
             userId = mUser.getUid();
         }
+
+        LinearLayoutManager layoutManager  = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        modelProductList = new ArrayList<>();
 
         btnEditShop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +88,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
         checkLoginState();
+
+        getProductDetails();
+
+    }
+
+    private void getProductDetails()
+    {
+        mRef.child(Constants.PRODUCTS).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                modelProductList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren())
+                {
+                    ModelProduct modelProduct = ds.getValue(ModelProduct.class);
+
+                        modelProductList.add(modelProduct);
+
+                    AdapterProduct adapterProduct = new AdapterProduct(modelProductList,getApplicationContext());
+                    recyclerView.setAdapter(adapterProduct);
+                    adapterProduct.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendToAddProduct()

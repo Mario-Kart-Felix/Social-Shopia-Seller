@@ -3,6 +3,8 @@ package com.socialcodia.social_shopia.model;
 public class ModelProduct {
     public String productTitle,productDescription,productQuantity,productPrice,productDiscount,productDiscountNote,productImage,productId,discountAvailable,shopId;
 
+    public ModelProduct() {
+    }
 
     public ModelProduct(String productTitle, String productDescription, String productQuantity, String productPrice, String productDiscount, String productDiscountNote, String productImage, String productId, String discountAvailable, String shopId) {
         this.productTitle = productTitle;
