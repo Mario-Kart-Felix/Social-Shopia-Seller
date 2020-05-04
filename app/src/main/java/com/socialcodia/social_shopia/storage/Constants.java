@@ -26,7 +26,8 @@ public class Constants {
             PRODUCT_DISCOUNT_NOTE = "productDiscountNote",
             PRODUCT_IMAGE = "productImage",
             PRODUCT_ID = "productId",
-            PRODUCTS = "products";
+            PRODUCTS = "products",
+            PRODUCT_DISCOUNT_AVAILABLE ="discountAvailable";
 
 
         public static final String [] productCategory =

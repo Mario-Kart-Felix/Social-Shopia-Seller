@@ -1,4 +1,4 @@
-package com.socialcodia.social_shopia;
+package com.socialcodia.social_shopia.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.socialcodia.social_shopia.R;
 import com.socialcodia.social_shopia.storage.Constants;
 import com.squareup.picasso.Picasso;
 

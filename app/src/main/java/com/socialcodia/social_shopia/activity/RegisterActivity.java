@@ -1,4 +1,4 @@
-package com.socialcodia.social_shopia;
+package com.socialcodia.social_shopia.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.socialcodia.social_shopia.R;
 import com.socialcodia.social_shopia.storage.Constants;
 
 import java.util.HashMap;

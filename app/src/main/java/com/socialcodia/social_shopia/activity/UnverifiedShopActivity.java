@@ -1,4 +1,4 @@
-package com.socialcodia.social_shopia;
+package com.socialcodia.social_shopia.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.socialcodia.social_shopia.R;
 
 public class UnverifiedShopActivity extends AppCompatActivity {
 

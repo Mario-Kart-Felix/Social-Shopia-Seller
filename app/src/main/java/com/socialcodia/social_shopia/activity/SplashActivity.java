@@ -1,10 +1,12 @@
-package com.socialcodia.social_shopia;
+package com.socialcodia.social_shopia.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.socialcodia.social_shopia.R;
 
 public class SplashActivity extends AppCompatActivity {
 

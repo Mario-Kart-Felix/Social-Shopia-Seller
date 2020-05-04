@@ -1,4 +1,4 @@
-package com.socialcodia.social_shopia;
+package com.socialcodia.social_shopia.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,12 +26,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.socialcodia.social_shopia.R;
 import com.socialcodia.social_shopia.storage.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -50,9 +53,12 @@ public class AddProductActivity extends AppCompatActivity {
     DatabaseReference mRef;
     FirebaseStorage mStorage;
     StorageReference mStorageRef;
+    FirebaseUser mUser;
 
     Uri filPath;
     String productTitle, productDescription, productQuantity, productPrice, productDiscount, productDiscountNote, productImage;
+    boolean discountAvailable;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class AddProductActivity extends AppCompatActivity {
         mRef = mDatabase.getReference();
         mStorage = FirebaseStorage.getInstance();
         mStorageRef = mStorage.getReference();
+        mUser = mAuth.getCurrentUser();
 
         //UI init
         inputProductTitle = findViewById(R.id.inputProductTitle);
@@ -80,13 +87,17 @@ public class AddProductActivity extends AppCompatActivity {
         ivProductImage = findViewById(R.id.ivProductImage);
         btnBack = findViewById(R.id.btnBack);
 
+        if (mUser!=null)
+        {
+            userId = mUser.getUid();
+        }
+
         tvProductCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCategoryDialogue();
             }
         });
-
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +183,7 @@ public class AddProductActivity extends AppCompatActivity {
          productDescription = inputProductDescription.getText().toString().trim();
          productQuantity = inputProductQuantity.getText().toString().trim();
          productPrice = inputProductPrice.getText().toString().trim();
-        boolean discountAvailable = switchProductDiscount.isChecked();
+         discountAvailable = switchProductDiscount.isChecked();
 
         if (productTitle.isEmpty())
         {
@@ -257,6 +268,13 @@ public class AddProductActivity extends AppCompatActivity {
         inputProductDiscountNote.setText("");
         tvProductCategory.setText("");
         filPath=null;
+        try {
+            Picasso.get().load(R.drawable.store).into(ivProductImage);
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addProduct(String imageDownloadUrl)
@@ -271,6 +289,8 @@ public class AddProductActivity extends AppCompatActivity {
         map.put(Constants.PRODUCT_DISCOUNT_NOTE,productDiscountNote);
         map.put(Constants.PRODUCT_IMAGE,imageDownloadUrl);
         map.put(Constants.PRODUCT_ID,productId);
+        map.put(Constants.SHOP_ID,userId);
+        map.put(Constants.PRODUCT_DISCOUNT_AVAILABLE,String.valueOf(discountAvailable));
         map.put(Constants.TIMESTAMP,String.valueOf(System.currentTimeMillis()));
         mRef.child(Constants.PRODUCTS).child(productId).setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
